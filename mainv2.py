@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from models import Product
 from database import SessionLocal, engine
 import database_models
+from sqlalchemy.orm import Session
 
 app = FastAPI()
 
@@ -18,6 +19,13 @@ products = [
     Product(id=4, name="Table", description="a wooden table", price=199.99, quantity=20)
 ]
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 def init_db():
     db = SessionLocal()
 
@@ -33,15 +41,18 @@ def init_db():
 init_db()
 
 @app.get("/products")
-def get_all__products():
-    return products
+def get_all__products(db: Session = Depends(get_db)):
+
+    db_products = db.query(database_models.Product).all()
+
+    return db_products
 
 # TEST: http://localhost:8000/product/1
 @app.get("/product/{id}")
-def get_product_by_id(id: int):
-    for product in products:
-        if product.id == id:
-            return product
+def get_product_by_id(id: int, db: Session = Depends(get_db)):
+    db_product_by_id = db.query(database_models.Product).filter(database_models.Product.id == id).first()
+    if db_product_by_id:
+        return db_product_by_id
         
     return "product not found"
 

@@ -1,17 +1,17 @@
 info:
-  name: 02-post
+  name: 02-get by id
   type: http
   seq: 2
 
 http:
-  method: POST
-  url: http://localhost:8000/product
+  method: GET
+  url: http://localhost:8000/product/1
   body:
     type: json
     data: |2-
         {
-          "id":8,
-          "name": "Phonetest",
+          "id":1,
+          "name": "Phonetestdddddddddddd",
           "description": "A smartphone",
           "price": 699.99,
           "quantity": 50
