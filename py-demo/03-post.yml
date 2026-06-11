@@ -10,7 +10,7 @@ http:
     type: json
     data: |2-
         {
-          "id":8,
+          "id":9,
           "name": "Phonetest",
           "description": "A smartphone",
           "price": 699.99,
